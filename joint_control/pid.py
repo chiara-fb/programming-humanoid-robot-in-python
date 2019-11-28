@@ -35,8 +35,8 @@ class PIDController(object):
         self.e2 = np.zeros(size)
         # ADJUST PARAMETERS BELOW
         delay = 0
-        self.Kp = 21
-        self.Ki = 1
+        self.Kp = 0
+        self.Ki = 0
         self.Kd = 0
         self.y = deque(np.zeros(size), maxlen=delay + 1)
 
@@ -53,7 +53,7 @@ class PIDController(object):
         @return control signal
         '''
         # YOUR CODE HERE
-               
+       
         e = np.subtract(target,sensor)
         u_new = self.u  + np.dot(self.Kp + self.dt*self.Ki + self.Kd/self.dt,e) - \
         np.dot(self.Kp+2*self.Kd/self.dt,self.e1) + np.dot(self.Kd/self.dt,self.e2)
@@ -62,10 +62,11 @@ class PIDController(object):
         self.e1 = e
         self.u = u_new
         
-        #not sure about other ways to deal with delays
+        #not sure bout other ways to deal with delays
         self.y.append(u_new)
         
         return self.u
+
 
 class PIDAgent(SparkAgent):
     def __init__(self, simspark_ip='localhost',
