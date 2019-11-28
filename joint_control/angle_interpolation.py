@@ -58,11 +58,13 @@ class AngleInterpolationAgent(PIDAgent):
             t_joint = times[j]
             k_joint = keys[j]
            
-            if time > t_joint[-1]: #when time > last item in the joints
-                target_joints[joint_name] = perception.joint[joint_name]
-                continue
+
 
             for t in range(len(t_joint)):
+                
+                if time > t_joint[-1]: #when time > last item in the joints
+                    target_joints[joint_name] = perception.joint[joint_name]
+                    continue
                 
                 if time < t_joint[t]:
                     
@@ -73,7 +75,7 @@ class AngleInterpolationAgent(PIDAgent):
                         P_3 = k_joint[0][0]
                         i = time / T_3
                         
-                    elif time > t_joint[t-1]:  #we found the right interval for interpolation
+                    elif time >= t_joint[t-1]:  #we found the right interval for interpolation
                         
                         T_0, T_3 = t_joint[t-1], t_joint[t]
                         P_0, P_3 = k_joint[t-1][0], k_joint[t][0]
