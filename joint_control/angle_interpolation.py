@@ -18,6 +18,7 @@
     # to the angle and time of the point. The first Bezier param describes the handle that controls the curve
     # preceding the point, the second describes the curve following the point.
 '''
+# versione finale
 
 import numpy as np
 from pid import PIDAgent
@@ -66,7 +67,7 @@ class AngleInterpolationAgent(PIDAgent):
                 if time < t_joint[t]:
                     
                     if t==0: #we don't have a preceding point, so initialize to zero
-                        T_0, P_0, P_1 = 0  
+                        T_0, P_0, P_1 = 0 , 0 , 0
                         T_3 = t_joint[0]
                         P_2 = k_joint[0][1][2]
                         P_3 = k_joint[0][0]
@@ -75,7 +76,8 @@ class AngleInterpolationAgent(PIDAgent):
                     elif time > t_joint[t-1]:  #we found the right interval for interpolation
                         
                         T_0, T_3 = t_joint[t-1], t_joint[t]
-                        P_0, P_3 = k_joint[t-1], k_joint[t]
+                        P_0, P_3 = k_joint[t-1][0], k_joint[t][0]
+
                         P_1 = P_0 + k_joint[t-1][2][2]
                         P_2 = P_3+ k_joint[t][1][2]                       
                         i = (time - T_0)/(T_3 -T_0) #normalize i to be in [0,1]
